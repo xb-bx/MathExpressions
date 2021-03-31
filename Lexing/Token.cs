@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-
 namespace MathEpxressions.Lexing
 {
-    public class Token
+    public struct Token
     {
         public Token(TokenType type, string value)
         {
