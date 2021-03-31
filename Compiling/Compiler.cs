@@ -30,6 +30,19 @@ namespace MathEpxressions.Compiling
             }
             return this;
         }
+        public Compiler AddFunction(string name, MethodInfo mi)
+        {
+            functions.Add(name, mi);
+            return this;
+        }
+        public Compiler AddManyFunctions(IEnumerable<(string name, MethodInfo mi)> functions)
+        {
+            foreach(var item in functions)
+            {
+                AddFunction(item.name, item.mi);
+            }
+            return this;
+        }
         public LinqExpressions.Expression CompileToExpression(IExpression expression) 
         {
             switch(expression) 
