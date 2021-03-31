@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace MathEpxressions.Parsing.AST
+namespace MathExpressions.Parsing.AST
 {
     public class VariableExpression : IExpression
     {

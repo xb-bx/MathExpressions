@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-namespace MathEpxressions.Lexing
+namespace MathExpressions.Lexing
 {
     public struct Token
     {

@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 using System;
-namespace MathEpxressions.Parsing.AST
+namespace MathExpressions.Parsing.AST
 {
     public interface IExpression
     { 

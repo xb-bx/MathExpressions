@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace MathEpxressions.Lexing
+namespace MathExpressions.Lexing
 {
     public class Lexer
     {

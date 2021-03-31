@@ -1,4 +1,4 @@
-﻿namespace MathEpxressions.Lexing
+﻿namespace MathExpressions.Lexing
 {
     public enum TokenType
     {

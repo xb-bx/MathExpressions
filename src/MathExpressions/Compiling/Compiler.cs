@@ -1,17 +1,17 @@
 using System;
 using LinqExpressions = System.Linq.Expressions;
-using MathEpxressions.Parsing.AST;
+using MathExpressions.Parsing.AST;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 
-namespace MathEpxressions.Compiling
+namespace MathExpressions.Compiling
 {
     public class Compiler
     {
         private Dictionary<string, LinqExpressions.ParameterExpression> parameters = new();
         private Dictionary<string, MethodInfo> functions = new();
-
+        public IReadOnlyDictionary<string, LinqExpressions.ParameterExpression> Parameters => parameters;
         public Compiler WithDefaultFunctions()
         {
             var mathMethods = typeof(Math).GetMethods(BindingFlags.Static | BindingFlags.Public).Where(x => x.ReturnParameter.ParameterType == typeof(double) && x.GetParameters().All(x =>x.ParameterType == typeof(double)));

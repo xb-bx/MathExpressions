@@ -1,12 +1,12 @@
-﻿using MathEpxressions.Lexing;
-using MathEpxressions.Parsing.AST;
+﻿using MathExpressions.Lexing;
+using MathExpressions.Parsing.AST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MathEpxressions.Parsing
+namespace MathExpressions.Parsing
 {
     public class Parser
     {

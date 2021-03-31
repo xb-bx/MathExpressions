@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MathEpxressions.Parsing.AST
+namespace MathExpressions.Parsing.AST
 {
     public class FunctionExpression : IExpression
     {
