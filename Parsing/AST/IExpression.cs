@@ -1,11 +1,8 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
+using System;
 namespace MathEpxressions.Parsing.AST
 {
     public interface IExpression
-    {
-        double Evaluate();
-
-        Expression Compile();
+    { 
     }
 }
