@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace MathExpressions.Lexing
@@ -18,7 +19,7 @@ namespace MathExpressions.Lexing
             {',', TokenType.Comma },
             {'^', TokenType.Power },
         };
-        public List<Token> Tokenize(char[] code)
+        public List<Token> Tokenize(ReadOnlySpan<char> code)
         {
             var res = new List<Token>();
 
@@ -46,7 +47,7 @@ namespace MathExpressions.Lexing
             return res;
         }
 
-        private Token TokenizeId(char[] code)
+        private Token TokenizeId(ReadOnlySpan<char> code)
         {
             sb.Clear();
             while (currentPos < code.Length && char.IsLetter(code[currentPos]))
@@ -57,7 +58,7 @@ namespace MathExpressions.Lexing
             return new Token(TokenType.Id, res);
         }
 
-        private Token TokenizeConstant(char[] code)
+        private Token TokenizeConstant(ReadOnlySpan<char> code)
         {
             sb.Clear();
             while (currentPos < code.Length && (code[currentPos] == '.' || char.IsDigit(code[currentPos])))
