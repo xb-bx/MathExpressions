@@ -68,7 +68,7 @@ namespace MathExpressions
                 {
                     functions.Add(name, value);
                 }
-                compiler.AddFunction(name, value);
+                compiler.AddFunction(name, value.Method);
             }
         }
         private double EvaluateExpression(IExpression expression, Dictionary<string, double> variables)
