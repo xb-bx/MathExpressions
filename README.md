@@ -74,5 +74,5 @@ engine.Evaluate("myfunc(x)", new {x = 4}); // 9
 - deg
 ## Install
 ```
-dotnet add package MathExpressions --version 1.0.0
+dotnet add package MathExpressions --version 1.0.1
 ```
