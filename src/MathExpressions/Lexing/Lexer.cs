@@ -90,7 +90,7 @@ namespace MathExpressions.Lexing
         private Token TokenizeConstant(ReadOnlySpan<char> code, ref int currentPos, StringBuilder sb)
         {
             sb.Clear();
-            while (currentPos < code.Length && (code[currentPos] == '.' || char.IsDigit(code[currentPos])))
+            while (currentPos < code.Length && (code[currentPos] == '.' || code[currentPos]==',' || char.IsDigit(code[currentPos])))
             {
                 sb.Append(code[currentPos++]);
             }
