@@ -2,6 +2,7 @@
 using MathExpressions.Parsing.AST;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,13 @@ namespace MathExpressions.Parsing
     {
         private int currentPos;
         private List<Token> tokens;
+        private CultureInfo cultureInfo;
+
+        public Parser(CultureInfo cultureInfo = null)
+        {
+            this.cultureInfo = cultureInfo;
+        }
+
         private IExpression AdditiveExpression()
         {
             var first = Multiplicative();
@@ -90,7 +98,7 @@ namespace MathExpressions.Parsing
             switch (tokens[currentPos++].Type)
             {
                 case TokenType.Constant:
-                    return new ConstantExpression(double.Parse(tokens[currentPos - 1].Value));
+                    return new ConstantExpression(double.Parse(tokens[currentPos - 1].Value, cultureInfo?.NumberFormat));
                 case TokenType.Id:
                     var name = tokens[currentPos-1].Value;
                     if (Match(TokenType.LParen, out _)) 
