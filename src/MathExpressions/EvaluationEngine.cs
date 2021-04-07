@@ -13,8 +13,7 @@ namespace MathExpressions
 {
 
     public class EvaluationEngine
-    {
-        private CultureInfo cultureInfo;
+    { 
         private Lexer lexer = new();
         private Compiler compiler = new();
         private Parser parser;
@@ -27,30 +26,30 @@ namespace MathExpressions
         }
         public void AddDefaultFunctions()
         {
-            functions["sin"] = (Func<double, double>)(x => Math.Sin(x));
-            functions["sinh"] = (Func<double, double>)(x => Math.Sinh(x));
-            functions["asin"] = (Func<double, double>)(x => Math.Asin(x));
-            functions["asinh"] = (Func<double, double>)(x => Math.Asinh(x));
-            functions["cos"] = (Func<double, double>)(x => Math.Cos(x));
-            functions["acos"] = (Func<double, double>)(x => Math.Acos(x));
-            functions["acosh"] = (Func<double, double>)(x => Math.Acosh(x));
-            functions["cosh"] = (Func<double, double>)(x => Math.Cosh(x));
-            functions["tan"] = (Func<double, double>)(x => Math.Tan(x));
-            functions["atan"] = (Func<double, double>)(x => Math.Atan(x));
-            functions["atanh"] = (Func<double, double>)(x => Math.Atanh(x));
-            functions["tanh"] = (Func<double, double>)(x => Math.Tanh(x));
+            functions["sin"] = (Func<double, double>)Math.Sin;
+            functions["sinh"] = (Func<double, double>)Math.Sinh;
+            functions["asin"] = (Func<double, double>)Math.Asin;
+            functions["asinh"] = (Func<double, double>)Math.Asinh;
+            functions["cos"] = (Func<double, double>)Math.Cos;
+            functions["acos"] = (Func<double, double>)Math.Acos;
+            functions["acosh"] = (Func<double, double>) Math.Acosh;
+            functions["cosh"] = (Func<double, double>) Math.Cosh;
+            functions["tan"] = (Func<double, double>) Math.Tan;
+            functions["atan"] = (Func<double, double>) Math.Atan;
+            functions["atanh"] = (Func<double, double>) Math.Atanh;
+            functions["tanh"] = (Func<double, double>) Math.Tanh;
             functions["ctg"] = (Func<double, double>)(x => 1.0 / Math.Tan(x));
-            functions["floor"] = (Func<double, double>)(x => Math.Floor(x));
-            functions["ceiling"] = (Func<double, double>)(x => Math.Ceiling(x));
-            functions["round"] = (Func<double, double>)(x => Math.Round(x));
-            functions["min"] = (Func<double, double, double>)((x, y) => Math.Min(x, y));
-            functions["max"] = (Func<double, double, double>)((x, y) => Math.Max(x, y));
-            functions["clamp"] = (Func<double, double, double, double>)((x, y, z) => Math.Clamp(x, y, z));
-            functions["sqrt"] = (Func<double, double>)((x) => Math.Sqrt(x));
-            functions["cbrt"] = (Func<double, double>)((x) => Math.Cbrt(x));
-            functions["log"] = (Func<double, double>)((x) => Math.Log(x));
-            functions["abs"] = (Func<double, double>)(x => Math.Abs(x));
-            functions["rad"] = (Func<double, double>)(x => x * Math.PI / 180);
+            functions["floor"] = (Func<double, double>) Math.Floor;
+            functions["ceiling"] = (Func<double, double>) Math.Ceiling;
+            functions["round"] = (Func<double, double>) Math.Round;
+            functions["min"] = (Func<double, double, double>)Math.Min;
+            functions["max"] = (Func<double, double, double>)Math.Max;
+            functions["clamp"] = (Func<double, double, double, double>)Math.Clamp;
+            functions["sqrt"] = (Func<double, double>)Math.Sqrt;
+            functions["cbrt"] = (Func<double, double>)Math.Cbrt;
+            functions["log"] = (Func<double, double>)Math.Log;
+            functions["abs"] = (Func<double, double>)Math.Abs;
+            functions["rad"] = (Func<double, double>)(x=>x * Math.PI / 180);
             functions["deg"] = (Func<double, double>)(x => x * 180 / Math.PI);
 
             compiler.AddManyFunctions(functions.AsEnumerable().Select(x => (x.Key, x.Value.Method)));
