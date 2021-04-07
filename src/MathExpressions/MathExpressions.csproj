@@ -1,8 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>latest</LangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Library to parse, interprete and compile math expressions</Description>
+    <PackageProjectUrl>https://github.com/Dotnet-And-Happiness/MathExpressions</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Dotnet-And-Happiness/MathExpressions</RepositoryUrl>
+    <PackageTags>math expressions parser interpreter compiler</PackageTags>
   </PropertyGroup>
 
 </Project>
