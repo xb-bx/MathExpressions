@@ -12,24 +12,7 @@ namespace MathExpressions.Compiling
         private Dictionary<string, LinqExpressions.ParameterExpression> parameters = new();
         private Dictionary<string, MethodInfo> functions = new();
         public IReadOnlyDictionary<string, LinqExpressions.ParameterExpression> Parameters => parameters;
-        public Compiler WithDefaultFunctions()
-        {
-            var mathMethods = typeof(Math).GetMethods(BindingFlags.Static | BindingFlags.Public).Where(x => x.ReturnParameter.ParameterType == typeof(double) && x.GetParameters().All(x =>x.ParameterType == typeof(double)));
-            
-            foreach(var item in mathMethods)
-            {
-                var name = item.Name.ToLower();
-                if(functions.ContainsKey(name))
-                {
-                    functions[name] = item;
-                }
-                else
-                {
-                    functions.Add(name, item);
-                }
-            }
-            return this;
-        }
+         
         public Compiler AddFunction(string name, MethodInfo mi)
         {
             functions.Add(name, mi);
