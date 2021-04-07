@@ -19,8 +19,7 @@ namespace MathExpressions
         private Parser parser;
         private Dictionary<string, Delegate> functions = new();
         public EvaluationEngine(CultureInfo cultureInfo = null)
-        {
-            this.cultureInfo = cultureInfo;
+        { 
             parser = new(cultureInfo);
             
         }
