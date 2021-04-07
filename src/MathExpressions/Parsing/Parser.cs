@@ -29,7 +29,7 @@ namespace MathExpressions.Parsing
         }
         private IExpression Multiplicative()
         {
-            var first = Unary();
+            var first = Power();
             if (Match(TokenType.Star, out _))
             {
                 var second = Multiplicative();
@@ -39,6 +39,17 @@ namespace MathExpressions.Parsing
             {
                 var second = Multiplicative();
                 return new BinaryExpression(first, second, '/');
+            }
+           
+            return first;
+        }
+        private IExpression Power()
+        {
+            var first = Unary();
+            if (Match(TokenType.Power, out _))
+            {
+                var second = Power();
+                return new BinaryExpression(first, second, '^');
             }
             return first;
         }

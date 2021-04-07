@@ -16,6 +16,7 @@ namespace MathExpressions.Lexing
             {'*', TokenType.Star },
             {'/', TokenType.Slash },
             {',', TokenType.Comma },
+            {'^', TokenType.Power },
         };
         public List<Token> Tokenize(char[] code)
         {

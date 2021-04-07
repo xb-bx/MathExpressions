@@ -66,6 +66,7 @@ namespace MathExpressions.Compiling
                             '-' => LinqExpressions.ExpressionType.Subtract,
                             '*' => LinqExpressions.ExpressionType.Multiply,
                             '/' => LinqExpressions.ExpressionType.Divide,
+                            '^' => LinqExpressions.ExpressionType.Power,
                             _ => LinqExpressions.ExpressionType.Add
                         };
                         var expr1 = CompileToExpression(be.FirstExpression);

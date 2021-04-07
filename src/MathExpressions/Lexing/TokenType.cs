@@ -6,7 +6,7 @@
         Constant,
         LParen, RParen, // (, )
         Comma,
-        Plus, Minus, Star, Slash,
+        Plus, Minus, Star, Slash, Power,
 
     }
 }
