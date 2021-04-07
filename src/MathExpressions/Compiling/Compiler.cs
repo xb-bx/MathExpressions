@@ -11,6 +11,7 @@ namespace MathExpressions.Compiling
     {
         private Dictionary<string, LinqExpressions.ParameterExpression> parameters = new();
         private Dictionary<string, MethodInfo> functions = new();
+        private Dictionary<Type, object> objects = new();
         public IReadOnlyDictionary<string, LinqExpressions.ParameterExpression> Parameters => parameters;
          
         public Compiler AddFunction(string name, MethodInfo mi)
@@ -67,7 +68,21 @@ namespace MathExpressions.Compiling
                 case FunctionExpression fe:
                     {
                         var method = functions[fe.Name];
-                        return LinqExpressions.Expression.Call(null, method, fe.Args.Select(x => CompileToExpression(x)));
+                        LinqExpressions.Expression expr = null;
+                        if (!method.IsStatic)
+                        {
+                            if (objects.ContainsKey(method.DeclaringType))
+                            {
+                                expr = LinqExpressions.Expression.Constant(objects[method.DeclaringType]);
+                            }
+                            else
+                            {
+                                var obj = method.DeclaringType.GetConstructor(new Type[0]).Invoke(null);
+                                expr = LinqExpressions.Expression.Constant(obj);
+                                objects.Add(method.DeclaringType, obj);
+                            }
+                        }
+                        return LinqExpressions.Expression.Call(expr, method, fe.Args.Select(x => CompileToExpression(x)));
                     }
             }
             return null;

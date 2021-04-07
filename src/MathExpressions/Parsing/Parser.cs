@@ -10,8 +10,7 @@ using System.Threading.Tasks;
 namespace MathExpressions.Parsing
 {
     public class Parser
-    {
-        private int currentPos;
+    { 
         private List<Token> tokens;
         private CultureInfo cultureInfo;
 
@@ -20,70 +19,70 @@ namespace MathExpressions.Parsing
             this.cultureInfo = cultureInfo;
         }
 
-        private IExpression AdditiveExpression()
+        private IExpression AdditiveExpression(ref int currentPos)
         {
-            var first = Multiplicative();
-            if (Match(TokenType.Plus, out _))
+            var first = Multiplicative(ref currentPos);
+            if (Match(TokenType.Plus, out _, ref currentPos))
             {
-                var second = AdditiveExpression();
+                var second = AdditiveExpression(ref currentPos);
                 return new BinaryExpression(first, second, '+');
             }
-            else if (Match(TokenType.Minus, out _))
+            else if (Match(TokenType.Minus, out _, ref currentPos))
             {
-                var second = AdditiveExpression();
+                var second = AdditiveExpression(ref currentPos);
                 return new BinaryExpression(first, second, '-');
             }
             return first;
         }
-        private IExpression Multiplicative()
+        private IExpression Multiplicative(ref int currentPos)
         {
-            var first = Power();
-            if (Match(TokenType.Star, out _))
+            var first = Power(ref currentPos);
+            if (Match(TokenType.Star, out _, ref currentPos))
             {
-                var second = Multiplicative();
+                var second = Multiplicative(ref currentPos);
                 return new BinaryExpression(first, second, '*');
             }
-            else if (Match(TokenType.Slash, out _))
+            else if (Match(TokenType.Slash, out _, ref currentPos))
             {
-                var second = Multiplicative();
+                var second = Multiplicative(ref currentPos);
                 return new BinaryExpression(first, second, '/');
             }
            
             return first;
         }
-        private IExpression Power()
+        private IExpression Power(ref int currentPos)
         {
-            var first = Unary();
-            if (Match(TokenType.Power, out _))
+            var first = Unary(ref currentPos);
+            if (Match(TokenType.Power, out _, ref currentPos))
             {
-                var second = Power();
+                var second = Power(ref currentPos);
                 return new BinaryExpression(first, second, '^');
             }
             return first;
         }
-        private IExpression Unary()
+        private IExpression Unary(ref int currentPos)
         {
-            if (Match(TokenType.Plus, out _))
+            if (Match(TokenType.Plus, out _, ref currentPos))
             {
-                var expr = Expression();
+                var expr = Expression(ref currentPos);
                 return new UnaryExpression(expr, '+');
             }
-            else if (Match(TokenType.Minus, out _))
+            else if (Match(TokenType.Minus, out _, ref currentPos))
             {
-                var expr = Expression();
+                var expr = Expression(ref currentPos);
                 return new UnaryExpression(expr, '-');
             }
-            return Expression();
+            return Expression(ref currentPos);
         }
-        private List<IExpression> CommaSeperated()
+        private List<IExpression> CommaSeperated(ref int currentPos)
         {
             var result = new List<IExpression>();
             
             while(currentPos < tokens.Count)
             {
-                var expr = AdditiveExpression();
+                var expr = AdditiveExpression(ref currentPos);
                 result.Add(expr);
-                if(Match(TokenType.RParen, out _))
+                if(Match(TokenType.RParen, out _, ref currentPos))
                 {
                     break;
                 }
@@ -93,7 +92,7 @@ namespace MathExpressions.Parsing
             return result;
 
         }
-        private IExpression Expression()
+        private IExpression Expression(ref int currentPos)
         {
             switch (tokens[currentPos++].Type)
             {
@@ -101,9 +100,9 @@ namespace MathExpressions.Parsing
                     return new ConstantExpression(double.Parse(tokens[currentPos - 1].Value, cultureInfo?.NumberFormat));
                 case TokenType.Id:
                     var name = tokens[currentPos-1].Value;
-                    if (Match(TokenType.LParen, out _)) 
+                    if (Match(TokenType.LParen, out _, ref currentPos)) 
                     { 
-                        var seperated = CommaSeperated();
+                        var seperated = CommaSeperated(ref currentPos);
                         return new FunctionExpression(name, seperated);
                     }
                     else
@@ -111,7 +110,7 @@ namespace MathExpressions.Parsing
                         return new VariableExpression(tokens[currentPos - 1].Value);
                     }
                 case TokenType.LParen:
-                    var expr = AdditiveExpression();
+                    var expr = AdditiveExpression(ref currentPos);
                     currentPos++;
                     return expr;
                 default:
@@ -122,10 +121,10 @@ namespace MathExpressions.Parsing
         public IExpression Parse(List<Token> tokens)
         {
             this.tokens = tokens;
-
-            return AdditiveExpression();
+            int pos = 0;
+            return AdditiveExpression(ref pos);
         }
-        private bool Match(TokenType type, out Token? t)
+        private bool Match(TokenType type, out Token? t, ref int currentPos)
         {
             if (currentPos < tokens.Count && tokens[currentPos].Type == type)
             {
