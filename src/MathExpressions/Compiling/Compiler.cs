@@ -9,11 +9,8 @@ namespace MathExpressions.Compiling
 {
     public class Compiler
     {
-        private Dictionary<string, LinqExpressions.ParameterExpression> parameters = new();
         private Dictionary<string, MethodInfo> functions = new();
-        private Dictionary<Type, object> objects = new();
-        public IReadOnlyDictionary<string, LinqExpressions.ParameterExpression> Parameters => parameters;
-         
+        private Dictionary<Type, object> objects = new(); 
         public Compiler AddFunction(string name, MethodInfo mi)
         {
             functions.Add(name, mi);
@@ -27,7 +24,7 @@ namespace MathExpressions.Compiling
             }
             return this;
         }
-        public LinqExpressions.Expression CompileToExpression(IExpression expression) 
+        public LinqExpressions.Expression CompileToExpression(IExpression expression, Dictionary<string, LinqExpressions.ParameterExpression> parameters) 
         {
             switch(expression) 
             {
@@ -53,16 +50,16 @@ namespace MathExpressions.Compiling
                             '^' => LinqExpressions.ExpressionType.Power,
                             _ => LinqExpressions.ExpressionType.Add
                         };
-                        var expr1 = CompileToExpression(be.FirstExpression);
-                        var expr2 = CompileToExpression(be.SecondExpression);
+                        var expr1 = CompileToExpression(be.FirstExpression,parameters);
+                        var expr2 = CompileToExpression(be.SecondExpression,parameters);
                         return LinqExpressions.Expression.MakeBinary(type, expr1, expr2);
                     }
                 case UnaryExpression ue:
                     {
                         switch(ue.Operator) 
                         {
-                            case '-':return LinqExpressions.Expression.Negate(CompileToExpression(ue.Expression));
-                            default:return CompileToExpression(ue.Expression);
+                            case '-':return LinqExpressions.Expression.Negate(CompileToExpression(ue.Expression,parameters));
+                            default:return CompileToExpression(ue.Expression, parameters);
                         }    
                     }
                 case FunctionExpression fe:
@@ -82,18 +79,20 @@ namespace MathExpressions.Compiling
                                 objects.Add(method.DeclaringType, obj);
                             }
                         }
-                        return LinqExpressions.Expression.Call(expr, method, fe.Args.Select(x => CompileToExpression(x)));
+                        return LinqExpressions.Expression.Call(expr, method, fe.Args.Select(x => CompileToExpression(x, parameters)));
                     }
             }
             return null;
         }
         public T CompileToLambda<T>(IExpression expression) where T : Delegate 
         {
-            return System.Linq.Expressions.Expression.Lambda<T>(CompileToExpression(expression), parameters.Values).Compile();
+			var parameters = new Dictionary<string, LinqExpressions.ParameterExpression>();
+            return System.Linq.Expressions.Expression.Lambda<T>(CompileToExpression(expression, parameters), parameters.Values).Compile();
         }
         public Delegate CompileToDelegate(IExpression expression) 
         {
-            return System.Linq.Expressions.Expression.Lambda(CompileToExpression(expression), parameters.Values).Compile();
+			var parameters = new Dictionary<string, LinqExpressions.ParameterExpression>();
+            return System.Linq.Expressions.Expression.Lambda(CompileToExpression(expression, parameters), parameters.Values).Compile();
         }
         
     }

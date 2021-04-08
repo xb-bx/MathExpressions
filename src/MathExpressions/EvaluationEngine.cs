@@ -21,7 +21,6 @@ namespace MathExpressions
         public EvaluationEngine(CultureInfo cultureInfo = null)
         { 
             parser = new(cultureInfo);
-            
         }
         public void AddDefaultFunctions()
         {
