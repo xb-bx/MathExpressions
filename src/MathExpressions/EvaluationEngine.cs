@@ -50,7 +50,7 @@ namespace MathExpressions
             functions["rad"] = (Func<double, double>)(x=>x * Math.PI / 180);
             functions["deg"] = (Func<double, double>)(x => x * 180 / Math.PI);
 
-            compiler.AddManyFunctions(functions.AsEnumerable().Select(x => (x.Key, x.Value.Method)));
+            compiler.AddManyFunctions(functions.AsEnumerable().Select(x => (x.Key, x.Value)));
         }
         public Delegate this[string name]
         {
@@ -65,7 +65,7 @@ namespace MathExpressions
                 {
                     functions.Add(name, value);
                 }
-                compiler.AddFunction(name, value.Method);
+                compiler.AddFunction(name, value);
             }
         }
         private double EvaluateExpression(IExpression expression, Dictionary<string, double> variables)

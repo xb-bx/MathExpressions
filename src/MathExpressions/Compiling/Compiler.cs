@@ -3,20 +3,19 @@ using LinqExpressions = System.Linq.Expressions;
 using MathExpressions.Parsing.AST;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Linq;
-
+using System.Linq; 
 namespace MathExpressions.Compiling
 {
     public class Compiler
     {
-        private Dictionary<string, MethodInfo> functions = new();
+        private Dictionary<string, Delegate> functions = new();
         private Dictionary<Type, object> objects = new(); 
-        public Compiler AddFunction(string name, MethodInfo mi)
+        public Compiler AddFunction(string name, Delegate mi)
         {
             functions.Add(name, mi);
             return this;
         }
-        public Compiler AddManyFunctions(IEnumerable<(string name, MethodInfo mi)> functions)
+        public Compiler AddManyFunctions(IEnumerable<(string name, Delegate mi)> functions)
         {
             foreach(var item in functions)
             {
@@ -64,24 +63,11 @@ namespace MathExpressions.Compiling
                     }
                 case FunctionExpression fe:
                     {
-                        var method = functions[fe.Name];
-                        LinqExpressions.Expression expr = null;
-                        if (!method.IsStatic)
-                        {
-                            if (objects.ContainsKey(method.DeclaringType))
-                            {
-                                expr = LinqExpressions.Expression.Constant(objects[method.DeclaringType]);
-                            }
-                            else
-                            {
-                                var obj = method.DeclaringType.GetConstructor(new Type[0]).Invoke(null);
-                                expr = LinqExpressions.Expression.Constant(obj);
-                                objects.Add(method.DeclaringType, obj);
-                            }
-                        }
-                        return LinqExpressions.Expression.Call(expr, method, fe.Args.Select(x => CompileToExpression(x, parameters)));
+                        var method = functions[fe.Name]; 
+                        var a = fe.Args.Select(x => CompileToExpression(x, parameters));
+                        return LinqExpressions.Expression.Invoke(LinqExpressions.Expression.Constant(method), a);
                     }
-            }
+            }           
             return null;
         }
         public T CompileToLambda<T>(IExpression expression) where T : Delegate 
