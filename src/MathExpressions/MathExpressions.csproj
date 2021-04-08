@@ -8,7 +8,7 @@
     <PackageProjectUrl>https://github.com/Dotnet-And-Happiness/MathExpressions</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Dotnet-And-Happiness/MathExpressions</RepositoryUrl>
     <PackageTags>math expressions parser interpreter compiler</PackageTags>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
   </PropertyGroup>
 
 </Project>
