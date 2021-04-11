@@ -102,6 +102,10 @@ namespace MathExpressions
                         '+' =>
                             EvaluateExpression(binary.FirstExpression, variables)
                             + EvaluateExpression(binary.SecondExpression, variables),
+						'%' =>
+                            EvaluateExpression(binary.FirstExpression, variables)
+                            % EvaluateExpression(binary.SecondExpression, variables),
+                   
                     };
                 case FunctionExpression function:
                     if (!functions.ContainsKey(function.Name))
@@ -132,6 +136,7 @@ namespace MathExpressions
         }
         public double Evaluate(string expression, object variables)
         {
+			
             var vars = GetVariables(variables);
             var tokens = lexer.Tokenize(expression);
             var expr = parser.Parse(tokens);

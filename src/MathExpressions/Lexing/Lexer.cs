@@ -18,6 +18,7 @@ namespace MathExpressions.Lexing
             {'/', TokenType.Slash },
             {',', TokenType.Comma },
             {'^', TokenType.Power },
+            {'%', TokenType.Mod },
         };
         public List<Token> Tokenize(ReadOnlySpan<char> code)
         {

@@ -47,7 +47,11 @@ namespace MathExpressions.Parsing
                 var second = Multiplicative(ref currentPos);
                 return new BinaryExpression(first, second, '/');
             }
-           
+			else if (Match(TokenType.Mod, out _, ref currentPos))
+            {
+                var second = Multiplicative(ref currentPos);
+                return new BinaryExpression(first, second, '%');
+            }
             return first;
         }
         private IExpression Power(ref int currentPos)

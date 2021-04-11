@@ -47,6 +47,7 @@ namespace MathExpressions.Compiling
                             '*' => LinqExpressions.ExpressionType.Multiply,
                             '/' => LinqExpressions.ExpressionType.Divide,
                             '^' => LinqExpressions.ExpressionType.Power,
+                            '%' => LinqExpressions.ExpressionType.Modulo,
                             _ => LinqExpressions.ExpressionType.Add
                         };
                         var expr1 = CompileToExpression(be.FirstExpression,parameters);
