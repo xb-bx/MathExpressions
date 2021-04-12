@@ -21,7 +21,7 @@
 	{
 		try
 		{
-			var engine = new MathExpressions.EvaluationEngine(new("en-GB"));
+			var engine = new MathExpressions.EvaluationEngine(new System.Globalization.CultureInfo("en-GB"));
 			engine.AddDefaultFunctions();
 			foreach(var item in fns.Split('\n').Select(x => x.Split('=', 2)))
 			{
