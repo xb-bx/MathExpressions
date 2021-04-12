@@ -29,6 +29,11 @@ namespace MathExpressions.Parsing.AST
             return HashCode.Combine(Name, Args);
         }
 
+        public IExpression Optimize()
+        {
+            return new FunctionExpression(Name, Args.Select(x =>x.Optimize()).ToList());
+        }
+
         public override string ToString()
         {
             var sb = new StringBuilder();

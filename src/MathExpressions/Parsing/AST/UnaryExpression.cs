@@ -26,6 +26,14 @@ namespace MathExpressions.Parsing.AST
             return HashCode.Combine(Expression, Operator);
         }
 
+        public IExpression Optimize()
+        {
+            if (Operator != '-')
+                return Expression;
+            else
+                return this;
+        }
+
         public override string ToString()
         {
             return $"{Operator}{Expression}";

@@ -26,5 +26,10 @@ namespace MathExpressions.Parsing.AST
         {
             return HashCode.Combine(Constant);
         }
+
+        public IExpression Optimize()
+        {
+            return this;
+        }
     }
 }
