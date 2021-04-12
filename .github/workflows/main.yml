@@ -5,9 +5,7 @@ env:
   PUBLISH_DIR: Samples/BlazorSample/bin/Release/netstandard2.1/publish/wwwroot
 
 # C. Controls when the action will run, in this case only checkins on master branch
-on:
-  push:
-    branches: [ main ]
+on: [ push ]
 
 jobs:
   build:
