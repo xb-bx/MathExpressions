@@ -15,10 +15,13 @@ jobs:
     steps:
     # D. Check out the code
     - uses: actions/checkout@v2
-
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: 5.0
     # E. Build and Publish the Blazor WebAssembly App
     - name: Publish app
-      run: dotnet publish -c Release Samples/BlazorSample/BlazorSample.csproj
+      run: dotnet publish -c Release Samples/BlazorSample
 
     # F. The <base> url in index.html needs to be modified depending on where the project is deployed.
     - name: Rewrite base href
