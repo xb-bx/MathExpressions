@@ -121,10 +121,26 @@ namespace MathExpressions
             }
             return 0;
         }
-        public double Evaluate(string expression, Dictionary<string, double> variables)
+        public IExpression Parse(string expression, bool optimize = false)
+        { 
+            var tokens = lexer.Tokenize(expression);
+            var expr = parser.Parse(tokens);
+            expr = optimize ? expr.Optimize() : expr;
+            return expr;
+        }
+        public double Evaluate(IExpression expression, Dictionary<string, double> variables)
+        {
+            return EvaluateExpression(expression, variables);
+        }
+        public double Evaluate(IExpression expression, object variables)
+        {
+            return EvaluateExpression(expression, GetVariables(variables));
+        }
+        public double Evaluate(string expression, Dictionary<string, double> variables, bool optimize = false)
         {
             var tokens = lexer.Tokenize(expression);
             var expr = parser.Parse(tokens);
+            expr = optimize ? expr.Optimize() : expr;
             return EvaluateExpression(expr, variables);
         }
         private Dictionary<string, double> GetVariables(object variables)
@@ -142,29 +158,31 @@ namespace MathExpressions
             var expr = parser.Parse(tokens);
             return EvaluateExpression(expr, vars);
         }
-        public async Task<double> EvaluateAsync(string expression, Dictionary<string, double> variables, CancellationToken token)
+        public async Task<double> EvaluateAsync(string expression, Dictionary<string, double> variables, bool optimize =false, CancellationToken token=default)
         {
             var tokens = await lexer.TokenizeAsync(expression, token);
             var expr = parser.Parse(tokens);
             return EvaluateExpression(expr, variables);
         }
-        public async Task<double> EvaluateAsync(string expression, object variables, CancellationToken token)
+        public async Task<double> EvaluateAsync(string expression, object variables, bool optimize = false, CancellationToken token = default)
         {
             var vars = GetVariables(variables);
             var tokens = await lexer.TokenizeAsync(expression, token);
             var expr = parser.Parse(tokens);
             return EvaluateExpression(expr, vars);
         }
-        public T Compile<T>(string expression) where T : Delegate
+        public T Compile<T>(string expression,bool optimize = false) where T : Delegate
         {
             var tokens = lexer.Tokenize(expression);
             var expr = parser.Parse(tokens);
+            expr = optimize ? expr.Optimize() : expr;
             return compiler.CompileToLambda<T>(expr);
         }
-        public Delegate Compile(string expression)
+        public Delegate Compile(string expression, bool optimize)
         {
             var tokens = lexer.Tokenize(expression);
             var expr = parser.Parse(tokens);
+            expr = optimize ? expr.Optimize() : expr;
             return compiler.CompileToDelegate(expr);
         }
     }
