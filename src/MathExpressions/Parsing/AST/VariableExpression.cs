@@ -17,5 +17,16 @@ namespace MathExpressions.Parsing.AST
         {
             return VariableName;
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is VariableExpression expression &&
+                   VariableName == expression.VariableName;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(VariableName);
+        }
     }
 }

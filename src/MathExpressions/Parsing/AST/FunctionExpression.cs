@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MathExpressions.Parsing.AST
@@ -12,7 +14,21 @@ namespace MathExpressions.Parsing.AST
         }
 
         public string Name { get; set; }
-        public List<IExpression> Args { get; set; } 
+        public List<IExpression> Args { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is FunctionExpression expression &&
+                   Name == expression.Name &&
+                   Args.SequenceEqual(expression.Args);
+                   //EqualityComparer<List<IExpression>>.Default.Equals(Args, expression.Args);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, Args);
+        }
+
         public override string ToString()
         {
             var sb = new StringBuilder();

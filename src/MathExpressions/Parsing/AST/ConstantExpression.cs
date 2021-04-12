@@ -15,5 +15,16 @@ namespace MathExpressions.Parsing.AST
         {
             return Constant.ToString();
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is ConstantExpression expression &&
+                   Constant == expression.Constant;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Constant);
+        }
     }
 }
