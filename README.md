@@ -1,6 +1,7 @@
 # MathExpressions
 .netstandard2.1 library to parse, evaluate and compile math expressions  
 [Download](https://www.nuget.org/packages/MathExpressions)
+[Try it online](https://dotnet-and-happiness.github.io/MathExpressions)
 ## Usage
 ### Interpete mode
 ```csharp
