@@ -18,7 +18,7 @@ jobs:
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v1.7.2
       with:
-          dotnet-version: 3.1
+          dotnet-version: 3.1.13
     # E. Build and Publish the Blazor WebAssembly App
     - name: Publish app
       run: dotnet publish -c Release Samples/BlazorSample
