@@ -31,6 +31,14 @@ var engine = new EvaluationEngine();
 Func<double, double> square = engine.Compile<Func<double,double>>("x^2");
 square(2); // 4
 ```
+### Optimization
+You can evaluate or compile expression with optimization
+```csharp
+var engine = new EvaluationEngine();
+double result = engine.Evaluate("x*0 + 5 + 11", new {x = 10}, true); // 16
+```
+Firstly, expression 'x*0 + 5 + 11' will be optimized to '16' and then evaluated to 16
+
 ### Functions
 #### Using default functions
 ```csharp
@@ -74,5 +82,5 @@ engine.Evaluate("myfunc(x)", new {x = 4}); // 9
 - deg
 ## Install
 ```
-dotnet add package MathExpressions --version 1.0.4
+dotnet add package MathExpressions --version 1.0.5
 ```
