@@ -1,0 +1,38 @@
+name: DeployToGitHubPages
+
+# B. Define a environment variable to indicate the publish location from the Blazor WebAssembly App
+env:
+  PUBLISH_DIR: Samples/BlazorSample/bin/Release/netstandard2.1/publish/wwwroot
+
+# C. Controls when the action will run, in this case only checkins on master branch
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    # D. Check out the code
+    - uses: actions/checkout@v2
+
+    # E. Build and Publish the Blazor WebAssembly App
+    - name: Publish app
+      run: dotnet publish -c Release Samples/BlazorSample/BlazorSample.csproj
+
+    # F. The <base> url in index.html needs to be modified depending on where the project is deployed.
+    - name: Rewrite base href
+      uses: SteveSandersonMS/ghaction-rewrite-base-href@v1
+      with:
+        html_path: ${{ env.PUBLISH_DIR }}/index.html
+        base_href: /MathExpressions/
+
+    # G. This step commits all files from the wwwroot folder to the gh-pages branch
+    - name: GitHub Pages
+      if: success()
+      uses: crazy-max/ghaction-github-pages@v1.5.1
+      with:
+        target_branch: gh-pages
+        build_dir: ${{ env.PUBLISH_DIR }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
