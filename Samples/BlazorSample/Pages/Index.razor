@@ -1,14 +1,15 @@
 ﻿@page "/"
-
+<p> <p> 
 <input type="text" @bind="@expression"/> <button @onclick="@Evaluate">Evaluate</button> <br/>
+</p>
+<p>
 <p>@result</p>
-<input type="checkbox" @bind="@optimize"/> Optimize <br/>
-
+<input type="checkbox" @bind="@optimize"/> Optimize <br/> 
 <p>Functions:</p>
 <textarea @bind="@fns"> 
 </textarea>
 <br/>
-<p>@error</p>
+<p>@error</p></p></p> 
 @code
 {
 	private bool optimize; 
