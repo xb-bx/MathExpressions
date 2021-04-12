@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\MathExpressions\MathExpressions.csproj" />
+    <PackageReference Include="MathExpressions" Version="1.0.5" />
   </ItemGroup>
 
 </Project>
