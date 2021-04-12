@@ -1,0 +1,36 @@
+﻿@page "/"
+
+<input type="text" @bind="@expression"/> <button @onclick="@Evaluate">Evaluate</button> <br/>
+<p>@result</p>
+<input type="checkbox" @bind="@optimize"/> Optimize <br/>
+
+<p>Functions:</p>
+<textarea @bind="@fns"> 
+</textarea>
+<br/>
+<p>@error</p>
+@code
+{
+	private bool optimize; 
+	private string expression;
+	private string fns="square=x^2\ncube=x^3";
+	private string result = "";
+	private string error = "";
+	private void Evaluate()
+	{
+		try
+		{
+			var engine = new MathExpressions.EvaluationEngine(new("en-GB"));
+			engine.AddDefaultFunctions();
+			foreach(var item in fns.Split('\n').Select(x => x.Split('=', 2)))
+			{
+				engine[item[0]] = engine.Compile(item[1], optimize);
+			}
+			result = engine.Evaluate(expression, new object()).ToString();
+		}
+		catch(Exception e)
+		{
+			error = e.Message;
+		}
+	}
+}
