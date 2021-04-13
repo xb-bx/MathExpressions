@@ -26,7 +26,7 @@ jobs:
       uses: SteveSandersonMS/ghaction-rewrite-base-href@v1
       with:
         html_path: ${{ env.PUBLISH_DIR }}/index.html
-        base_href: /MathExpressions/Samples/BlazorSample/bin/Release/netstandard2.1/publish/wwwroot/
+        base_href: /MathExpressions/
 
     # G. This step commits all files from the wwwroot folder to the gh-pages branch
     - name: GitHub Pages
