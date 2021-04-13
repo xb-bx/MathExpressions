@@ -1,6 +1,6 @@
 ﻿@page "/"
 <p> <p> 
-<input type="text" @bind="@expression"/> <button @onclick="@Evaluate">Evaluate</button> <br/>
+<input type="text" @bind="@expression" @oninput="(e)=> Evaluate(e.Value as string)"/><br/>
 </p>
 <p>
 <p>@result</p>
@@ -17,7 +17,7 @@
 	private string fns="square=x^2\ncube=x^3";
 	private string result = "";
 	private string error = "";
-	private void Evaluate()
+	private void Evaluate(string expression)
 	{
 		try
 		{
