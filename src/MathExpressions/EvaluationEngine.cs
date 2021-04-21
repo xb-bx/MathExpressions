@@ -75,7 +75,7 @@ namespace MathExpressions
                 case ConstantExpression constant:
                     return constant.Constant;
                 case VariableExpression variable:
-                    if (!variables.ContainsKey(variable.VariableName))
+                    if (!variables?.ContainsKey(variable.VariableName))
                         throw new VariableNotFoundException(variable.VariableName);
                     return variables[variable.VariableName];
                 case UnaryExpression unary:
@@ -128,15 +128,17 @@ namespace MathExpressions
             expr = optimize ? expr.Optimize() : expr;
             return expr;
         }
-        public double Evaluate(IExpression expression, Dictionary<string, double> variables)
+        
+		public double Evaluate(IExpression expression, Dictionary<string, double> variables = null)
         {
             return EvaluateExpression(expression, variables);
         }
-        public double Evaluate(IExpression expression, object variables)
+		
+        public double Evaluate(IExpression expression, object variables = null)
         {
-            return EvaluateExpression(expression, GetVariables(variables));
+            return EvaluateExpression(expression, variables is not null ? GetVariables(variables) : null);
         }
-        public double Evaluate(string expression, Dictionary<string, double> variables, bool optimize = false)
+        public double Evaluate(string expression, Dictionary<string, double> variables = null, bool optimize = false)
         {
             var tokens = lexer.Tokenize(expression);
             var expr = parser.Parse(tokens);
@@ -150,23 +152,22 @@ namespace MathExpressions
                 .GetProperties()
                 .Select(x => new KeyValuePair<string, double>(x.Name, Convert.ToDouble(x.GetValue(variables)))));
         }
-        public double Evaluate(string expression, object variables)
-        {
-			
-            var vars = GetVariables(variables);
+        public double Evaluate(string expression, object variables = null)
+        {	
+            var vars = variables is not null ? GetVariables(variables) : null;
             var tokens = lexer.Tokenize(expression);
             var expr = parser.Parse(tokens);
             return EvaluateExpression(expr, vars);
         }
-        public async Task<double> EvaluateAsync(string expression, Dictionary<string, double> variables, bool optimize =false, CancellationToken token=default)
+        public async Task<double> EvaluateAsync(string expression, Dictionary<string, double> variables = null, bool optimize = false, CancellationToken token = default)
         {
             var tokens = await lexer.TokenizeAsync(expression, token);
             var expr = parser.Parse(tokens);
             return EvaluateExpression(expr, variables);
         }
-        public async Task<double> EvaluateAsync(string expression, object variables, bool optimize = false, CancellationToken token = default)
+        public async Task<double> EvaluateAsync(string expression, object variables = null, bool optimize = false, CancellationToken token = default)
         {
-            var vars = GetVariables(variables);
+            var vars = variables is not null ? GetVariables(variables) : null;
             var tokens = await lexer.TokenizeAsync(expression, token);
             var expr = parser.Parse(tokens);
             return EvaluateExpression(expr, vars);
@@ -178,7 +179,7 @@ namespace MathExpressions
             expr = optimize ? expr.Optimize() : expr;
             return compiler.CompileToLambda<T>(expr);
         }
-        public Delegate Compile(string expression, bool optimize)
+        public Delegate Compile(string expression, bool optimize = false)
         {
             var tokens = lexer.Tokenize(expression);
             var expr = parser.Parse(tokens);
