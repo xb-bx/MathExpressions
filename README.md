@@ -6,9 +6,9 @@
 ### Interpete mode
 ```csharp
 var engine = new EvaluationEngine();
-double result = engine.Evaluate("54 + 43 / 5 * 2", new Dictionary<string, double>());
+double result = engine.Evaluate("54 + 43 / 5 * 2");
 // Also there is asynchronious version of method
-double result = await engine.EvaluateAsync("123 - 5",new Dictionary<string, double>());
+double result = await engine.EvaluateAsync("123 - 5");
 ```
 #### Evaluate with object of anonymous type
 ```csharp
