@@ -75,7 +75,7 @@ namespace MathExpressions
                 case ConstantExpression constant:
                     return constant.Constant;
                 case VariableExpression variable:
-                    if (!variables?.ContainsKey(variable.VariableName))
+                    if (variables?.ContainsKey(variable.VariableName) != true)
                         throw new VariableNotFoundException(variable.VariableName);
                     return variables[variable.VariableName];
                 case UnaryExpression unary:
@@ -129,7 +129,7 @@ namespace MathExpressions
             return expr;
         }
         
-		public double Evaluate(IExpression expression, Dictionary<string, double> variables = null)
+		public double Evaluate(IExpression expression, Dictionary<string, double> variables)
         {
             return EvaluateExpression(expression, variables);
         }
@@ -138,7 +138,7 @@ namespace MathExpressions
         {
             return EvaluateExpression(expression, variables is not null ? GetVariables(variables) : null);
         }
-        public double Evaluate(string expression, Dictionary<string, double> variables = null, bool optimize = false)
+        public double Evaluate(string expression, Dictionary<string, double> variables, bool optimize = false)
         {
             var tokens = lexer.Tokenize(expression);
             var expr = parser.Parse(tokens);
@@ -159,7 +159,7 @@ namespace MathExpressions
             var expr = parser.Parse(tokens);
             return EvaluateExpression(expr, vars);
         }
-        public async Task<double> EvaluateAsync(string expression, Dictionary<string, double> variables = null, bool optimize = false, CancellationToken token = default)
+        public async Task<double> EvaluateAsync(string expression, Dictionary<string, double> variables, bool optimize = false, CancellationToken token = default)
         {
             var tokens = await lexer.TokenizeAsync(expression, token);
             var expr = parser.Parse(tokens);
