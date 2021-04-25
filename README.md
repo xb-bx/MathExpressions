@@ -47,7 +47,7 @@ var engine = new EvaluationEngine();
 engine.AddDefaultFunctions();
 engine.Evaluate("sqrt(x)", new {x = 4}); // 2
 ```
-[List of default functions](#functions)
+[List of default functions](#Functions)
 #### Using custom functions
 ``` csharp
 var engine = new EvaluationEngine();
@@ -94,7 +94,7 @@ engine.Bind(typeof(MyFuncs), member => member.Name.ToLower());
 engine.Evaluate("twice(myconst)"); // 110
 ```
 
-### Default functions:
+### Functions
 - sin
 - sinh
 - asin
@@ -120,8 +120,7 @@ engine.Evaluate("twice(myconst)"); // 110
 - abs
 - rad
 - deg
-## Install
-<a id="functions"></a>
+## Install 
 ```
 dotnet add package MathExpressions --version 1.1.0
 ```
