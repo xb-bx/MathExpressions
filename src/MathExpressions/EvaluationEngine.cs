@@ -16,12 +16,17 @@ namespace MathExpressions
     {
         private Lexer lexer = new();
         private Compiler compiler = new();
-        private Parser parser; 
+        private Parser parser;
 
 
         public EvaluationEngine(CultureInfo cultureInfo = null)
         {
             parser = new(cultureInfo);
+        }
+        public void AddDefaultConstants()
+        {
+            SetConst("E", Math.E);
+            SetConst("PI", Math.PI);
         }
         public void AddDefaultFunctions()
         {
