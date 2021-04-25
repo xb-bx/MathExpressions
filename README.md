@@ -47,15 +47,54 @@ var engine = new EvaluationEngine();
 engine.AddDefaultFunctions();
 engine.Evaluate("sqrt(x)", new {x = 4}); // 2
 ```
-[List of default functions](#functions)
+[List of default functions](#Functions)
 #### Using custom functions
 ``` csharp
 var engine = new EvaluationEngine();
 engine["myfunc"] = (Func<double,double>)(x => x + 5);
 engine.Evaluate("myfunc(x)", new {x = 4}); // 9
 ```
-### Default functions:
-<a id="functions"></a>
+
+### Constants
+#### Set contant
+```csharp
+var engine = new EvaluationEngine();
+engine.SetCont("TwoPI", 6.28);
+engine.Evaluate("TwoPI"); // 6.28
+```
+#### Default contstants
+```csharp
+var engine = new EvaluationEngine();
+engine.AddDefaultConstants();
+engine.Evaluate("PI") // 3.14
+```
+Default constants:
+- E
+- PI
+
+### Binding methods and constants
+For example, there is some class:  
+```csharp
+public static class MyFuncs
+{
+  public static const double MyConst = 55;
+  public static double Twice(double val) => val * 2;
+}
+```
+It can be binded in the following way:
+```csharp
+var engine = new EvaluationEngine();
+engine.Bind(typeof(MyFuncs));
+engine.Evaluate("Twice(MyConst)"); // 110
+```
+Also you can specify naming function:
+```csharp
+var engine = new EvaluationEngine();
+engine.Bind(typeof(MyFuncs), member => member.Name.ToLower());
+engine.Evaluate("twice(myconst)"); // 110
+```
+
+### Functions
 - sin
 - sinh
 - asin
@@ -81,7 +120,7 @@ engine.Evaluate("myfunc(x)", new {x = 4}); // 9
 - abs
 - rad
 - deg
-## Install
+## Install 
 ```
-dotnet add package MathExpressions --version 1.0.5
+dotnet add package MathExpressions --version 1.1.0
 ```
