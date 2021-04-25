@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 namespace MathExpressions
 {
-    public delegate string FuncRenamer(string funcName);
+    public delegate string MemeberRenamer(MemberInfo member);
     public class EvaluationEngine
     {
         private Lexer lexer = new();
@@ -147,7 +147,7 @@ namespace MathExpressions
             return expr;
         }
 
-        public void Bind(Type type, FuncRenamer renamer = null)
+        public void Bind(Type type, MemeberRenamer renamer = null)
         {
             System.Diagnostics.Debugger.Launch();
             var dT = typeof(double);
@@ -162,7 +162,7 @@ namespace MathExpressions
                                 .Append(dT)
                                 .ToArray()
                     ),
-                x), renamer is null ? x.Name : renamer(x.Name)))
+                x), renamer is null ? x.Name : renamer(x)))
                 ;
             foreach (var fn in fns)
             {
@@ -171,7 +171,7 @@ namespace MathExpressions
             var consts = type.GetMembers(BindingFlags.Static | BindingFlags.Public).Where(member => member.MemberType == MemberTypes.Field);
             foreach (var c in consts)
             {
-                SetConst(renamer is null ? c.Name : renamer(c.Name), (double)((FieldInfo)c).GetValue(null));
+                SetConst(renamer is null ? c.Name : renamer(c), (double)((FieldInfo)c).GetValue(null));
             }
         }
 
