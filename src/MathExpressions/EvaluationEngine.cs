@@ -5,10 +5,10 @@ using MathExpressions.Parsing.AST;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Globalization; 
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Reflection; 
+using System.Reflection;
 namespace MathExpressions
 {
     public delegate string FuncRenamer(string funcName);
@@ -16,58 +16,62 @@ namespace MathExpressions
     {
         private Lexer lexer = new();
         private Compiler compiler = new();
-        private Parser parser;
-        private Dictionary<string, Delegate> functions = new();
+        private Parser parser; 
+
+
         public EvaluationEngine(CultureInfo cultureInfo = null)
         {
             parser = new(cultureInfo);
         }
         public void AddDefaultFunctions()
         {
-            functions["sin"] = (Func<double, double>)Math.Sin;
-            functions["sinh"] = (Func<double, double>)Math.Sinh;
-            functions["asin"] = (Func<double, double>)Math.Asin;
-            functions["asinh"] = (Func<double, double>)Math.Asinh;
-            functions["cos"] = (Func<double, double>)Math.Cos;
-            functions["acos"] = (Func<double, double>)Math.Acos;
-            functions["acosh"] = (Func<double, double>)Math.Acosh;
-            functions["cosh"] = (Func<double, double>)Math.Cosh;
-            functions["tan"] = (Func<double, double>)Math.Tan;
-            functions["atan"] = (Func<double, double>)Math.Atan;
-            functions["atanh"] = (Func<double, double>)Math.Atanh;
-            functions["tanh"] = (Func<double, double>)Math.Tanh;
-            functions["ctg"] = (Func<double, double>)(x => 1.0 / Math.Tan(x));
-            functions["floor"] = (Func<double, double>)Math.Floor;
-            functions["ceiling"] = (Func<double, double>)Math.Ceiling;
-            functions["round"] = (Func<double, double>)Math.Round;
-            functions["min"] = (Func<double, double, double>)Math.Min;
-            functions["max"] = (Func<double, double, double>)Math.Max;
-            functions["clamp"] = (Func<double, double, double, double>)Math.Clamp;
-            functions["sqrt"] = (Func<double, double>)Math.Sqrt;
-            functions["cbrt"] = (Func<double, double>)Math.Cbrt;
-            functions["log"] = (Func<double, double>)Math.Log;
-            functions["abs"] = (Func<double, double>)Math.Abs;
-            functions["rad"] = (Func<double, double>)(x => x * Math.PI / 180);
-            functions["deg"] = (Func<double, double>)(x => x * 180 / Math.PI);
-
-            compiler.AddManyFunctions(functions.AsEnumerable().Select(x => (x.Key, x.Value)));
+            this["sin"] = (Func<double, double>)Math.Sin;
+            this["sinh"] = (Func<double, double>)Math.Sinh;
+            this["asin"] = (Func<double, double>)Math.Asin;
+            this["asinh"] = (Func<double, double>)Math.Asinh;
+            this["cos"] = (Func<double, double>)Math.Cos;
+            this["acos"] = (Func<double, double>)Math.Acos;
+            this["acosh"] = (Func<double, double>)Math.Acosh;
+            this["cosh"] = (Func<double, double>)Math.Cosh;
+            this["tan"] = (Func<double, double>)Math.Tan;
+            this["atan"] = (Func<double, double>)Math.Atan;
+            this["atanh"] = (Func<double, double>)Math.Atanh;
+            this["tanh"] = (Func<double, double>)Math.Tanh;
+            this["ctg"] = (Func<double, double>)(x => 1.0 / Math.Tan(x));
+            this["floor"] = (Func<double, double>)Math.Floor;
+            this["ceiling"] = (Func<double, double>)Math.Ceiling;
+            this["round"] = (Func<double, double>)Math.Round;
+            this["min"] = (Func<double, double, double>)Math.Min;
+            this["max"] = (Func<double, double, double>)Math.Max;
+            this["clamp"] = (Func<double, double, double, double>)Math.Clamp;
+            this["sqrt"] = (Func<double, double>)Math.Sqrt;
+            this["cbrt"] = (Func<double, double>)Math.Cbrt;
+            this["log"] = (Func<double, double>)Math.Log;
+            this["abs"] = (Func<double, double>)Math.Abs;
+            this["rad"] = (Func<double, double>)(x => x * Math.PI / 180);
+            this["deg"] = (Func<double, double>)(x => x * 180 / Math.PI);
         }
-        public Delegate this[string name]
+
+        public void SetConst(string name, double val)
         {
-            get => functions[name];
-            set
+            if (compiler.Constants.ContainsKey(name))
             {
-                if (functions.ContainsKey(name))
-                {
-                    functions[name] = value;
-                }
-                else
-                {
-                    functions.Add(name, value);
-                }
-                compiler[name] = value;
+                compiler.Constants[name] = val;
+            }
+            else
+            {
+                compiler.Constants.Add(name, val);
             }
         }
+
+
+        public Delegate this[string name]
+        {
+            get => compiler[name];
+            set => compiler[name] = value; 
+        }
+
+
         private double EvaluateExpression(IExpression expression, Dictionary<string, double> variables)
         {
             switch (expression)
@@ -75,9 +79,18 @@ namespace MathExpressions
                 case ConstantExpression constant:
                     return constant.Constant;
                 case VariableExpression variable:
-                    if (variables?.ContainsKey(variable.VariableName) != true)
+                    if (variables?.ContainsKey(variable.VariableName) == true)
+                    {
+                        return variables[variable.VariableName];
+                    }
+                    else if(compiler.Constants.ContainsKey(variable.VariableName))
+                    {
+                        return compiler.Constants[variable.VariableName];
+                    }
+                    else
+                    {
                         throw new VariableNotFoundException(variable.VariableName);
-                    return variables[variable.VariableName];
+                    }
                 case UnaryExpression unary:
                     return unary.Operator switch
                     {
@@ -108,11 +121,11 @@ namespace MathExpressions
 
                     };
                 case FunctionExpression function:
-                    if (!functions.ContainsKey(function.Name))
+                    if (!compiler.Functions.ContainsKey(function.Name))
                     {
                         throw new FunctionNotFoundException(function.Name);
                     }
-                    var fn = functions[function.Name];
+                    var fn =compiler.Functions[function.Name];
                     var args = function.Args.Select(x => (EvaluateExpression(x, variables)) as object).ToArray();
                     return Convert.ToDouble(fn.DynamicInvoke(args));
                 default:
@@ -130,32 +143,38 @@ namespace MathExpressions
         }
 
         public void Bind(Type type, FuncRenamer renamer = null)
-        { 
+        {
+            System.Diagnostics.Debugger.Launch();
             var dT = typeof(double);
             var fns = type
                 .GetMethods(BindingFlags.Public | BindingFlags.Static)
                 .Where(x => x.ReturnType == dT)
                 .Where(x => x.GetParameters().All(x => x.ParameterType == dT))
-                .Select(x => 
+                .Select(x =>
                     (Delegate.CreateDelegate(System.Linq.Expressions.Expression.GetFuncType(
                             x.GetParameters()
                                 .Select(t => t.ParameterType)
                                 .Append(dT)
                                 .ToArray()
-                    ), 
+                    ),
                 x), renamer is null ? x.Name : renamer(x.Name)))
                 ;
             foreach (var fn in fns)
             {
                 this[fn.Item2] = fn.Item1;
             }
+            var consts = type.GetMembers(BindingFlags.Static | BindingFlags.Public).Where(member => member.MemberType == MemberTypes.Field);
+            foreach (var c in consts)
+            {
+                SetConst(renamer is null ? c.Name : renamer(c.Name), (double)((FieldInfo)c).GetValue(null));
+            }
         }
 
-		public double Evaluate(IExpression expression, Dictionary<string, double> variables)
+        public double Evaluate(IExpression expression, Dictionary<string, double> variables)
         {
             return EvaluateExpression(expression, variables);
         }
-		
+
         public double Evaluate(IExpression expression, object variables = null)
         {
             return EvaluateExpression(expression, variables is not null ? GetVariables(variables) : null);
@@ -175,7 +194,7 @@ namespace MathExpressions
                 .Select(x => new KeyValuePair<string, double>(x.Name, Convert.ToDouble(x.GetValue(variables)))));
         }
         public double Evaluate(string expression, object variables = null)
-        {	
+        {
             var vars = variables is not null ? GetVariables(variables) : null;
             var tokens = lexer.Tokenize(expression);
             var expr = parser.Parse(tokens);
@@ -194,7 +213,7 @@ namespace MathExpressions
             var expr = parser.Parse(tokens);
             return EvaluateExpression(expr, vars);
         }
-        public T Compile<T>(string expression,bool optimize = false) where T : Delegate
+        public T Compile<T>(string expression, bool optimize = false) where T : Delegate
         {
             var tokens = lexer.Tokenize(expression);
             var expr = parser.Parse(tokens);

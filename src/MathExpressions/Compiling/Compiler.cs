@@ -8,20 +8,20 @@ namespace MathExpressions.Compiling
 {
     public class Compiler
     {
-        private Dictionary<string, Delegate> functions = new();
-        private Dictionary<Type, object> objects = new();
+        public Dictionary<string, Delegate> Functions { get; private set; } = new();
+        public Dictionary<string, double> Constants { get; private set; } = new();
         public Delegate this[string name]
         {
-            get => functions[name];
+            get => Functions[name];
             set
             {
-                if (functions.ContainsKey(name))
+                if (Functions.ContainsKey(name))
                 {
-                    functions[name] = value;
+                    Functions[name] = value;
                 }
                 else
                 {
-                    functions.Add(name, value);
+                    Functions.Add(name, value);
                 }
             }
         }
@@ -43,6 +43,10 @@ namespace MathExpressions.Compiling
                     if (parameters.ContainsKey(ve.VariableName))
                     {
                         return parameters[ve.VariableName];
+                    }
+                    else if (Constants.ContainsKey(ve.VariableName))
+                    {
+                        return LinqExpressions.Expression.Constant(Constants[ve.VariableName]);
                     }
                     else
                     {
@@ -74,7 +78,7 @@ namespace MathExpressions.Compiling
                     }
                 case FunctionExpression fe:
                     {
-                        var method = functions[fe.Name];
+                        var method = Functions[fe.Name];
                         var a = fe.Args.Select(x => CompileToExpression(x, parameters));
                         return LinqExpressions.Expression.Invoke(LinqExpressions.Expression.Constant(method), a);
                     }
