@@ -95,7 +95,6 @@ engine.Evaluate("twice(myconst)"); // 110
 ```
 
 ### Default functions:
-<a id="functions"></a>
 - sin
 - sinh
 - asin
@@ -122,6 +121,7 @@ engine.Evaluate("twice(myconst)"); // 110
 - rad
 - deg
 ## Install
+<a id="functions"></a>
 ```
 dotnet add package MathExpressions --version 1.1.0
 ```
