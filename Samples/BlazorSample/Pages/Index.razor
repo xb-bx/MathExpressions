@@ -1,20 +1,28 @@
 ﻿@page "/"
-<p> <p> 
-<input type="text" @bind="@expression" @oninput="(e)=> Evaluate(e.Value as string)"/><br/>
-</p>
+<p> 
+	<p> 
+		<input type="text" @bind="@expression" @oninput="(e)=> Evaluate(e.Value as string)"/><br/>
+	</p>
 <p>
-<p>@result</p>
-<input type="checkbox" @bind="@optimize"/> Optimize <br/> 
-<p>Functions:</p>
-<textarea @bind="@fns"> 
-</textarea>
-<br/>
-<p>@error</p></p></p> 
+	<p>@result</p>
+	<input type="checkbox" @bind="@optimize"/> Optimize <br/> 
+	<p>Functions:</p>
+		<textarea @bind="@fns"> 
+		</textarea>
+		<br/>
+	<p>Constants:</p>
+		<textarea @bind="@consts"> 
+		</textarea>
+		<br/>
+	<p>@error</p>
+	</p>
+</p> 
 @code
 {
 	private bool optimize; 
 	private string expression;
-	private string fns="square=x^2\ncube=x^3";
+	private string fns = "square=x^2\ncube=x^3";
+	private string consts = "";
 	private string result = "";
 	private string error = "";
 	private void Evaluate(string expression)
@@ -23,11 +31,17 @@
 		{
 			var engine = new MathExpressions.EvaluationEngine(new System.Globalization.CultureInfo("en-GB"));
 			engine.AddDefaultFunctions();
+			engine.AddDefaultConstants();
 			foreach(var item in fns.Split('\n').Select(x => x.Split('=', 2)))
 			{
 				engine[item[0]] = engine.Compile(item[1], optimize);
 			}
-			result = engine.Evaluate(expression, new object()).ToString();
+			foreach(var item in consts.Split('\n').Select(x => x.Split('=', 2)))
+			{
+				engine.SetConst(item[0], double.Parse(item[1]));
+			}
+			result = engine.Evaluate(expression).ToString();
+			error = "";
 		}
 		catch(Exception e)
 		{

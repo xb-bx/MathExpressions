@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MathExpressions" Version="1.0.5" />
+    <PackageReference Include="MathExpressions" Version="1.1.0" />
   </ItemGroup>
 
 </Project>
