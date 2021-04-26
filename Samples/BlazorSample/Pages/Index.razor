@@ -32,13 +32,19 @@
 			var engine = new MathExpressions.EvaluationEngine(new System.Globalization.CultureInfo("en-GB"));
 			engine.AddDefaultFunctions();
 			engine.AddDefaultConstants();
-			foreach(var item in fns.Split('\n').Select(x => x.Split('=', 2)))
+			if(fns is not null and not "")
 			{
-				engine[item[0]] = engine.Compile(item[1], optimize);
+				foreach(var item in fns.Split('\n').Select(x => x.Split('=', 2)))
+				{
+					engine[item[0]] = engine.Compile(item[1], optimize);
+				}
 			}
-			foreach(var item in consts.Split('\n').Select(x => x.Split('=', 2)))
+			if(consts is not null and not "")
 			{
-				engine.SetConst(item[0], double.Parse(item[1]));
+				foreach(var item in consts.Split('\n').Select(x => x.Split('=', 2)))
+				{
+					engine.SetConst(item[0], double.Parse(item[1]));
+				}
 			}
 			result = engine.Evaluate(expression).ToString();
 			error = "";
