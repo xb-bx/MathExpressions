@@ -122,5 +122,5 @@ engine.Evaluate("twice(myconst)"); // 110
 - deg
 ## Install 
 ```
-dotnet add package MathExpressions --version 1.1.0
+dotnet add package MathExpressions --version 1.1.1
 ```
