@@ -17,8 +17,11 @@ namespace MathExpressions
         private Lexer lexer = new();
         private Compiler compiler = new();
         private Parser parser;
-
-
+		
+		
+		public IReadOnlyDictionary<string, double> Constants => compiler.Constants;
+		public IReadOnlyDictionary<string, Delagate> Functions => compiler.Functions;
+		
         public EvaluationEngine(CultureInfo cultureInfo = null)
         {
             parser = new(cultureInfo);
