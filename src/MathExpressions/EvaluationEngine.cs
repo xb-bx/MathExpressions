@@ -20,7 +20,7 @@ namespace MathExpressions
 		
 		
 		public IReadOnlyDictionary<string, double> Constants => compiler.Constants;
-		public IReadOnlyDictionary<string, Delagate> Functions => compiler.Functions;
+		public IReadOnlyDictionary<string, Delegate> Functions => compiler.Functions;
 		
         public EvaluationEngine(CultureInfo cultureInfo = null)
         {
