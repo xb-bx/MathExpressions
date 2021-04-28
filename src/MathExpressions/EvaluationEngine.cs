@@ -19,8 +19,8 @@ namespace MathExpressions
         private Parser parser;
 		
 		
-		public IReadOnlyDictionary<string, double> Constants => compiler.Constants;
-		public IReadOnlyDictionary<string, Delegate> Functions => compiler.Functions;
+		public Dictionary<string, double> Constants => compiler.Constants;
+		public Dictionary<string, Delegate> Functions => compiler.Functions;
 		
         public EvaluationEngine(CultureInfo cultureInfo = null)
         {
