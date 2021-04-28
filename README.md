@@ -47,7 +47,7 @@ var engine = new EvaluationEngine();
 engine.AddDefaultFunctions();
 engine.Evaluate("sqrt(x)", new {x = 4}); // 2
 ```
-[List of default functions](#Functions)
+[List of default functions](#functions-1)
 #### Using custom functions
 ``` csharp
 var engine = new EvaluationEngine();
