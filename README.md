@@ -3,7 +3,7 @@
 [Download](https://www.nuget.org/packages/MathExpressions)
 [Try it online](https://dotnet-and-happiness.github.io/MathExpressions)
 ## Usage
-### Interpete mode
+### Interprete mode
 ```csharp
 var engine = new EvaluationEngine();
 double result = engine.Evaluate("54 + 43 / 5 * 2");
